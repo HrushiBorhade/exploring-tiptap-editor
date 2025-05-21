@@ -1,168 +1,334 @@
-'use client'
-import { useEditor, EditorContent } from "@tiptap/react"
-import StarterKit from "@tiptap/starter-kit"
-import Strike from "@tiptap/extension-strike"
-import { Button } from "../ui/button"
-const SimpleEditor = () => {
-    const editor = useEditor({
-        editorProps: {
-            attributes: {
-                class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none',
-            },
-        },
-        extensions: [StarterKit, Strike],
-        content: CONTENT,
-        autofocus: true,
-        editable: true,
-        injectCSS: false,
-    })
-    if (!editor) {
-        return null
-    }
+"use client";
 
+import { Color } from "@tiptap/extension-color";
+import ListItem from "@tiptap/extension-list-item";
+import TextStyle from "@tiptap/extension-text-style";
+import {
+  EditorContent,
+  EditorContext,
+  useCurrentEditor,
+  useEditor,
+} from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import React from "react";
+import { Button } from "../ui/button";
 
-    return (
-        <div className="  overflow-hidden  border border-dashed rounded-lg relative">
+const MenuBar = () => {
+  const { editor } = useCurrentEditor();
 
-            <div className="w-full h-[70dvh] p-4 overflow-auto flex flex-col gap-2">
-                <div className="w-full flex items-center gap-1">
-                    <button onClick={() => editor.chain().focus().toggleStrike().run()}
-                        className={editor.isActive('strike') ? 'bg-amber-400 p-2 rounded-lg' : ''}
-                    >
-                        S
-                    </button>
-                </div>
-                <EditorContent className={`font-mono ${editor.isActive("highlight") && "bg-amber-400"}`} editor={editor} />
-            </div>
-            <div className="absolute w-full bottom-0  h-20 bg-gradient-to-t from-background to-transparent" />
-        </div>
-    )
-}
+  if (!editor) {
+    return null;
+  }
 
-export default SimpleEditor
-const CONTENT =
-    `AI Agents: An Overview
-Introduction
-AI agents are autonomous or semi-autonomous software systems that can perceive their environment, make decisions, and take actions to achieve specific goals. Unlike traditional software that follows predefined paths, AI agents can adapt their behavior based on their experiences and changing circumstances. The concept brings together multiple disciplines including artificial intelligence, machine learning, cognitive science, and systems engineering.
+  return (
+    <div className="control-group">
+      <div className="flex items-center gap-2 flex-wrap">
+        <Button
+          variant="outline"
+          onClick={() => editor.chain().focus().toggleBold().run()}
+          disabled={!editor.can().chain().focus().toggleBold().run()}
+          className={editor.isActive("bold") ? "is-active" : ""}
+        >
+          Bold
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => editor.chain().focus().toggleItalic().run()}
+          disabled={!editor.can().chain().focus().toggleItalic().run()}
+          className={editor.isActive("italic") ? "is-active" : ""}
+        >
+          Italic
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => editor.chain().focus().toggleStrike().run()}
+          disabled={!editor.can().chain().focus().toggleStrike().run()}
+          className={editor.isActive("strike") ? "is-active" : ""}
+        >
+          Strike
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => editor.chain().focus().toggleCode().run()}
+          disabled={!editor.can().chain().focus().toggleCode().run()}
+          className={editor.isActive("code") ? "is-active" : ""}
+        >
+          Code
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => editor.chain().focus().unsetAllMarks().run()}
+        >
+          Clear marks
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => editor.chain().focus().clearNodes().run()}
+        >
+          Clear nodes
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => editor.chain().focus().setParagraph().run()}
+          className={editor.isActive("paragraph") ? "is-active" : ""}
+        >
+          Paragraph
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 1 }).run()
+          }
+          className={
+            editor.isActive("heading", { level: 1 }) ? "is-active" : ""
+          }
+        >
+          H1
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 2 }).run()
+          }
+          className={
+            editor.isActive("heading", { level: 2 }) ? "is-active" : ""
+          }
+        >
+          H2
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 3 }).run()
+          }
+          className={
+            editor.isActive("heading", { level: 3 }) ? "is-active" : ""
+          }
+        >
+          H3
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 4 }).run()
+          }
+          className={
+            editor.isActive("heading", { level: 4 }) ? "is-active" : ""
+          }
+        >
+          H4
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 5 }).run()
+          }
+          className={
+            editor.isActive("heading", { level: 5 }) ? "is-active" : ""
+          }
+        >
+          H5
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 6 }).run()
+          }
+          className={
+            editor.isActive("heading", { level: 6 }) ? "is-active" : ""
+          }
+        >
+          H6
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
+          className={editor.isActive("bulletList") ? "is-active" : ""}
+        >
+          Bullet list
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+          className={editor.isActive("orderedList") ? "is-active" : ""}
+        >
+          Ordered list
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+          className={editor.isActive("codeBlock") ? "is-active" : ""}
+        >
+          Code block
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => editor.chain().focus().toggleBlockquote().run()}
+          className={editor.isActive("blockquote") ? "is-active" : ""}
+        >
+          Blockquote
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => editor.chain().focus().setHorizontalRule().run()}
+        >
+          Horizontal rule
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => editor.chain().focus().setHardBreak().run()}
+        >
+          Hard break
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => editor.chain().focus().undo().run()}
+          disabled={!editor.can().chain().focus().undo().run()}
+        >
+          Undo
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => editor.chain().focus().redo().run()}
+          disabled={!editor.can().chain().focus().redo().run()}
+        >
+          Redo
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => editor.chain().focus().setColor("#958DF1").run()}
+          className={
+            editor.isActive("textStyle", { color: "#958DF1" })
+              ? "is-active"
+              : ""
+          }
+        >
+          Purple
+        </Button>
+      </div>
+    </div>
+  );
+};
 
-Core Components of AI Agents
-1. Perception
-Sensors/Inputs: Ways for the agent to receive information from its environment
-Processing: Methods to interpret raw input data into meaningful information
-State representation: Internal models of the world and current situation
-2. Decision Making
-Goals: Objectives that guide the agent's behavior
-Planning: Creating sequences of actions to achieve goals
-Reasoning: Logic-based processes to evaluate options and situations
-Learning: Adapting behaviors based on experience
-3. Action
-Effectors/Outputs: Ways for the agent to influence its environment
-Action selection: Choosing from available options
-Execution: Implementing selected actions
-Types of AI Agents
-Reactive Agents
-Simple agents that operate purely on stimulus-response mechanisms without maintaining internal state. They map directly from current inputs to outputs without considering history.
+const extensions = [
+  Color.configure({ types: [TextStyle.name, ListItem.name] }),
+  TextStyle.configure({ types: [ListItem.name] }),
+  StarterKit.configure({
+    bulletList: {
+      keepMarks: true,
+      keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+    },
+    orderedList: {
+      keepMarks: true,
+      keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+    },
+  }),
+];
 
-Example: A thermostat that turns heating on when temperature drops below a threshold.
+const content = `
+<h1>Vercel AI SDK: Streamlining AI Application Development</h1>
 
-State-Based Agents
-Agents that maintain an internal representation of their environment, allowing them to make decisions based on both current percepts and their stored state.
+<h2>Introduction to Vercel AI SDK</h2>
+<p>Vercel AI SDK is a powerful, open-source library designed to help developers build cutting-edge AI-powered applications with ease. It provides a comprehensive set of tools and utilities for creating intelligent, responsive, and efficient AI-driven experiences across web and mobile platforms.</p>
 
-Example: A chess-playing AI that maintains a representation of the board state.
+<h2>Key Features and Capabilities</h2>
+<h3>1. Unified AI Integration</h3>
+<ul>
+    <li><p>Seamless integration with multiple AI providers and large language models</p></li>
+    <li><p>Support for popular AI platforms like OpenAI, Anthropic, and others</p></li>
+    <li><p>Simplified API for handling AI interactions and responses</p></li>
+</ul>
 
-Goal-Based Agents
-Agents that make decisions based on how actions will help achieve specific goals. These agents evaluate possible futures.
+<h3>2. Streaming Capabilities</h3>
+<ul>
+    <li><p>Real-time AI response streaming</p></li>
+    <li><p>Efficient handling of large language model outputs</p></li>
+    <li><p>Reduced latency and improved user experience</p></li>
+</ul>
 
-Example: A pathfinding agent that plots a route to reach a destination.
+<h2>Core Components</h2>
+<h3>1. AI Hooks</h3>
+<p>The SDK provides powerful React hooks for managing AI interactions:</p>
+<ul>
+    <li><p><code>useChat()</code>: Manages conversational interfaces</p></li>
+    <li><p><code>useCompletion()</code>: Handles text completion tasks</p></li>
+</ul>
 
-Utility-Based Agents
-Agents that optimize for a utility function that quantifies the desirability of different states or outcomes.
+<h3>2. Provider Abstraction</h3>
+<p>Offers a flexible architecture that allows developers to:</p>
+<ul>
+    <li><p>Switch between different AI providers easily</p></li>
+    <li><p>Implement custom AI provider integrations</p></li>
+    <li><p>Maintain consistent interface across different AI services</p></li>
+</ul>
 
-Example: A recommendation system maximizing user engagement or satisfaction.
+<h2>Installation and Setup</h2>
+<p>Install the Vercel AI SDK using npm or yarn:</p>
+<pre><code>npm install ai
+# or
+yarn add ai</code></pre>
 
-Learning Agents
-Agents that can improve their performance over time through experience.
+<h2>Basic Usage Example</h2>
+<pre><code>import { useChat } from 'ai/react'
 
-Example: A reinforcement learning system that plays games and improves its strategy through multiple iterations.
+function ChatComponent() {
+  const { messages, input, handleInputChange, handleSubmit } = useChat()
 
-Multi-Agent Systems
-Complex systems where multiple agents interact with each other, often with different capabilities, responsibilities, or even competing goals.
+  return (
+    <div>
+      {messages.map(m => (
+        <div key={m.id}>{m.role}: {m.content}</div>
+      ))}
+      
+      <form onSubmit={handleSubmit}>
+        <input
+          value={input}
+          onChange={handleInputChange}
+          placeholder="Send a message"
+        />
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  )
+}</code></pre>
 
-Characteristics:
-Coordination: Methods for agents to work together
-Negotiation: Protocols for resolving conflicts or allocating resources
-Communication: Information exchange between agents
-Emergence: Complex behaviors that arise from simple agent interactions
-Modern AI Agent Architectures
-LLM-Based Agents
-Leveraging large language models as the core reasoning engine for agents, with various tools and capabilities integrated.
+<h2>Advanced Capabilities</h2>
+<ul>
+    <li><p>AI-powered text generation</p></li>
+    <li><p>Conversational interfaces</p></li>
+    <li><p>Content summarization</p></li>
+    <li><p>Intelligent response generation</p></li>
+</ul>
 
-Example: An AI assistant that can reason about queries, use tools, and take actions on behalf of users.
+<h2>Benefits for Developers</h2>
+<ul>
+    <li><p>Rapid AI application development</p></li>
+    <li><p>Reduced boilerplate code</p></li>
+    <li><p>Cross-platform compatibility</p></li>
+    <li><p>Performance-optimized AI interactions</p></li>
+</ul>
 
-Agentic Workflows
-Systems of specialized agents working together in orchestrated processes.
+<h2>Ecosystem and Integration</h2>
+<p>The Vercel AI SDK is designed to work seamlessly with:</p>
+<ul>
+    <li><p>Next.js applications</p></li>
+    <li><p>React frameworks</p></li>
+    <li><p>Serverless environments</p></li>
+    <li><p>Various AI model providers</p></li>
+</ul>
 
-Example: A system where one agent handles customer inquiries, another researches solutions, and a third formulates and delivers responses.
+<p>By providing a robust and flexible toolkit, Vercel AI SDK empowers developers to create sophisticated AI-driven applications with minimal complexity.<br class="ProseMirror-trailingBreak"></p>
+`;
 
-Autonomous Systems
-Fully independent agents that operate without continuous human oversight.
-
-Example: Self-driving vehicles, autonomous drones, or robotics systems.
-
-Applications of AI Agents
-Personal Assistants
-Task management and scheduling
-Information retrieval and summarization
-Communication management
-Business Process Automation
-Customer service agents
-Data processing and analysis
-Decision support systems
-Creative Domains
-Co-creative assistants for writing, design, and coding
-Generative systems for content creation
-Ideation and brainstorming partners
-Research and Discovery
-Scientific hypothesis generation and testing
-Literature review and knowledge synthesis
-Experimental design optimization
-Physical World Interaction
-Robotics control systems
-Smart home and IoT management
-Manufacturing and industrial automation
-Ethical and Safety Considerations
-Alignment
-Ensuring agents act in accordance with human values and intentions.
-
-Transparency
-Making agent decision-making processes understandable and explainable.
-
-Agency and Control
-Balancing autonomous operation with appropriate human oversight.
-
-Social Impact
-Understanding and mitigating effects on labor markets, social systems, and human relationships.
-
-Security
-Protecting against misuse, manipulation, or adversarial attacks on agent systems.
-
-Future Directions
-Increased Autonomy
-More capable agents that require less human supervision and can handle increasingly complex tasks.
-
-Enhanced Collaboration
-Better human-agent and agent-agent collaboration models.
-
-Embodied Intelligence
-Integration of agent systems with physical capabilities through robotics.
-
-Collective Intelligence
-Networks of specialized agents working together to solve complex problems.
-
-General Agency
-Progress toward agents with broader, more flexible capabilities across domains.
-
-Conclusion
-AI agents represent one of the most promising and potentially transformative applications of artificial intelligence. As these systems continue to evolve and become more capable, they are likely to play increasingly important roles across virtually all domains of human activity. The challenges of designing safe, effective, and beneficial agent systems will be central to the field of AI in the coming years.
-
-`
+export default () => {
+  const editor = useEditor({
+    content,
+    extensions,
+  });
+  return (
+    <EditorContext.Provider value={{ editor }}>
+        <MenuBar/>
+      <EditorContent role="presentation" editor={editor} className="font-mono"></EditorContent>
+    </EditorContext.Provider>
+  );
+};
